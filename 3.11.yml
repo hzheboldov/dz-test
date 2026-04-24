@@ -1,0 +1,47 @@
+user:
+  isAdmin: true
+  name: John Doe
+  age: 30
+  title: sysadmin
+  skills:
+    - linux
+    - docker
+    - kubernetes
+  location: Moscow
+  pets:
+    - dog
+    - canary
+
+skills:
+  linux:
+    level: 5
+    description: |
+      I know how to use linux
+      And much more
+  docker:
+    level: 4
+    description: |
+      I know how to use docker
+      More or less
+  kubernetes:
+    level: 1
+    description: |
+      I do not know how to use kubernetes
+      Absolutely not
+
+location:
+  country: Russia
+  city: Moscow
+  street: Big-big Street
+  house: 123
+  flat: 456
+
+pets:
+  dog:
+    name: Jack
+    breed: toy-terrier
+    canMeauw: off
+  canary:
+    name: Birdie
+    breed: canary
+    canMeauw: off    
