@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conv-api-deployment
+spec:
+  selector:
+    matchLabels:
+      components: backend
+  template:
+    metadata:
+      labels:
+        components: backend
+    spec:
+      containers:
+      - name: conv-app
+        image: antonlarichev/conv-api:1.0
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        env:
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: RABBITMQ_DEFAULT_USER
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: RABBITMQ_DEFAULT_PASS
+          - name: AMPQ_EXCHANGE
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: AMPQ_EXCHANGE
+          - name: AMPQ_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: AMPQ_HOSTNAME
+          - name: AMPQ_USER
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: AMPQ_USER
+          - name: AMPQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: conv-api-secret
+                key: AMPQ_PASSWORD
+        volumeMounts:
+          - name: app-data
+            mountPath: /opt/app/uploads
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: app-pvc             
+

@@ -28,9 +28,15 @@ spec:
             protocol: TCP
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: guest
+              valueFrom:
+                secretKeyRef:
+                  name: conv-api-secret
+                  key: RABBITMQ_DEFAULT_USER
             - name: RABBITMQ_DEFAULT_PASS
-              value: guest
+              valueFrom:
+                secretKeyRef:
+                  name: conv-api-secret
+                  key: RABBITMQ_DEFAULT_PASS
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
