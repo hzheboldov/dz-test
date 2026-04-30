@@ -5,18 +5,18 @@ metadata:
 spec:
   selector:
     matchLabels:
-      components: backend
+      components: converter-api
   replicas: 1
   template:
     metadata:
       labels:
-        components: backend
+        components: converter-api
     spec:
       containers:
         - name: converter
           image: antonlarichev/conv-service:1.0
           ports:
-            - containerPort: 4000
+            - containerPort: 3001
           resources:
             requests:
               memory: "128Mi"
