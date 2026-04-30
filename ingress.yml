@@ -24,3 +24,10 @@ spec:
             name: conv-api-clusterip
             port: 
               number: 3000
+      - path: "/uploads"
+        pathType: Prefix
+        backend:
+          service:
+            name: conv-api-clusterip
+            port:
+              number: 3000
