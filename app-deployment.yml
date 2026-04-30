@@ -20,8 +20,14 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              memory: 1024Mi
-              cpu: 500m
+              cpu: "250m"
+              memory: "128Mi"
             limits:
-              memory: 1024Mi
-              cpu: 500m
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: VITE_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: conv-app-configmap
+                  key: VITE_DOMAIN
