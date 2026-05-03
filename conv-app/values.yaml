@@ -1,0 +1,28 @@
+app:
+  imagePullPolicy: Never
+  host: conv.test
+  replicas: 1
+  name: conv-app
+  version: 1.2
+  image: antonlarichev/conv-app
+  components: frontend
+  port: 80
+  limits:
+    memory: 512Mi
+    cpu: 500m
+  requests:
+    memory: 128Mi
+    cpu: 250m
+  env:
+    configMapKeyRef:
+      name: conv-app-configmap
+      key: VITE_DOMAIN
+
+configmap:
+  name: conv-app-configmap
+  VITE_DOMAIN: "http://conv.test"
+
+ingress:
+  port1: 80
+  port2: 3000
+  port3: 3000
