@@ -1,0 +1,14 @@
+app:
+  imagePullPolicy: Never
+  replicas: 1
+  name: short-app
+  version: v1.4
+  image: antonlarichev/short-app
+  components: frontend
+  port: 80
+  limits:
+    memory: 128Mi
+    cpu: 100m
+  requests:
+    memory: 64Mi
+    cpu: 50m

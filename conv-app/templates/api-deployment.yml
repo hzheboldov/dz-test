@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.api.name | default "conv-app" }}-deployment
+spec:
+  replicas: {{ .Values.api.replicas | default 1 }}
+  selector:
+    matchLabels:
+      components: {{ .Values.api.components | default "frontend" }}
+  template:
+    metadata:
+      labels:
+        components: {{ .Values.api.components | default "frontend" }}
+    spec:
+      containers:
+        - name: {{ .Values.api.name | default "conv-app" }}
+          image: {{ .Values.api.image | default "antonlarichev/conv-api" }}:{{ .Values.api.version | default "1.0" }}
+          imagePullPolicy: {{ .Values.api.imagePullPolicy | default "Always" }}
+          ports:
+            - containerPort: {{ .Values.api.port | default 3000 }}
+          resources:
+            requests: {{ .Values.api.requests | toYaml | nindent 14 }}
+            limits: {{ .Values.api.limits | toYaml | nindent 14 }}
+          env:
+            {{- range .Values.api.envs }}
+            {{- $data := dict "name" $.Values.api.name "env" . }}
+            {{- include "env.template" $data | indent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: app-data
+              mountPath: /opt/app/uploads
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: app-pvc

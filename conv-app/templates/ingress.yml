@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.app.name }}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.app.host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ .Values.app.name }}-clusterip
+            port: 
+              number: {{ .Values.ingress.port1 | default 80 }}
+      - pathType: Prefix
+        path: "/api"
+        backend:
+          service:
+            name: {{ .Values.app.name }}-clusterip
+            port: 
+              number: {{ .Values.ingress.port2 | default 3000 }}
+      - path: "/uploads"
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.app.name }}-clusterip
+            port:
+              number: {{ .Values.ingress.port3 | default 3000 }}

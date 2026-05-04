@@ -1,0 +1,8 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.configmap.name | default "conv-app-configmap" }}
+data: 
+  VITE_DOMAIN: {{ .Values.configmap.VITE_DOMAIN | default "http://conv.test" }}
+  

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name | default "conv-app" }}-deployment
+spec:
+  replicas: {{ .Values.app.replicas | default 1 }}
+  selector:
+    matchLabels:
+      components: {{ .Values.app.components | default "frontend" }}
+  template:
+    metadata:
+      labels:
+        components: {{ .Values.app.components | default "frontend" }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name | default "conv-app" }}
+          image: {{ .Values.app.image | default "antonlarichev/conv-app" }}:{{ .Values.app.version | default "1.2" }}
+          imagePullPolicy: {{ .Values.app.imagePullPolicy | default "Always" }}
+          ports:
+            - containerPort: {{ .Values.app.port | default 80 }}
+          resources:
+            requests: {{ .Values.app.requests | toYaml | nindent 14 }}
+            limits: {{ .Values.app.limits | toYaml | nindent 14 }}
+          env:
+            - name: VITE_DOMAIN
+              valueFrom: 
+                configMapKeyRef: {{ .Values.app.env.configMapKeyRef | toYaml | nindent 18 }}
