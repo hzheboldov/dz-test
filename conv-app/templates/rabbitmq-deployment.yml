@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rabbitmq.name }}-deployment
+spec:
+  replicas: {{ .Values.rabbitmq.replicas }}
+  selector:
+    matchLabels:
+      components: {{ .Values.rabbitmq.components }}
+  template:
+    metadata:
+      labels:
+        components: {{ .Values.rabbitmq.components }}
+    spec:
+      containers:
+        - name: {{ .Values.rabbitmq.name }}
+          image: {{ .Values.rabbitmq.image }}:{{ .Values.rabbitmq.version }}
+          imagePullPolicy: {{ .Values.rabbitmq.imagePullPolicy }}
+          ports:
+            {{- range .Values.rabbitmq.ports }}
+            {{- $data := dict "name" .name "containerPort" .containerPort "protocol" .protocol }}
+            {{- include "rabbitmqPorts.template" $data | indent 12 }}
+            {{- end }}
+          env:
+            {{- range .Values.rabbitmq.envs }}
+            {{- $data := dict "name" $.Values.rabbitmq.name "env" . }}
+            {{- include "env.template" $data | indent 12 }}
+            {{- end }}
+          volumeMounts:
+            {{- range .Values.rabbitmq.volumeMounts }}
+            {{- $data := dict "name" .name "mountPath" .mountPath }}
+            {{- include "volumeMount.template" $data | indent 12 }}
+            {{- end }}
+          resources:
+            requests: {{ .Values.rabbitmq.requests | toYaml | nindent 14 }}
+            limits: {{ .Values.rabbitmq.limits | toYaml | nindent 14 }}
+      volumes:
+          {{- range .Values.rabbitmq.volumes }}
+          {{- $data := dict "name" .name "claimName" .claimName }}
+          {{- include "volume.template" $data | indent 10 }}
+          {{- end }}
