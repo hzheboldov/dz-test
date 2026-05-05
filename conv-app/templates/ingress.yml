@@ -21,13 +21,13 @@ spec:
         path: "/api"
         backend:
           service:
-            name: {{ .Values.app.name }}-clusterip
+            name: {{ .Values.api.name }}-clusterip
             port: 
               number: {{ .Values.ingress.port2 | default 3000 }}
       - path: "/uploads"
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.app.name }}-clusterip
+            name: {{ .Values.api.name }}-clusterip
             port:
               number: {{ .Values.ingress.port3 | default 3000 }}

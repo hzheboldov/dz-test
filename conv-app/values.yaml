@@ -97,18 +97,18 @@ rabbitmq:
   - name: epmd
     containerPort: 4369
     protocol: TCP
-    requests:
-      memory: 1Gi
-      cpu: 100m
-    limits:
-      memory: 1Gi
-      cpu: 100m
+  requests:
+    memory: 1Gi
+    cpu: 100m
+  limits:
+    memory: 1Gi
+    cpu: 100m
   envs:
     - RABBITMQ_DEFAULT_USER
     - RABBITMQ_DEFAULT_PASS
   volumes:
-    - name: app-data
-      claimName: app-pvc
+    - name: rabbitmq-data
+      claimName: rabbitmq-pvc
   volumeMounts:
-    - name: app-data
-      mountPath: /opt/app/uploads
+    - name: rabbitmq-data
+      mountPath: /var/lib/rabbitmq/mnesia
